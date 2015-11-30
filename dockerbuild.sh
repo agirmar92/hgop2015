@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo Cleaning...
 rm -rf ./dist
