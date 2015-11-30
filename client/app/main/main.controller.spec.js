@@ -25,4 +25,8 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
     expect(scope.awesomeThings.length).toBe(4);
   });
+
+  it('should FAIL', function() {
+    expect(4).toBe(3);
+  });
 });
