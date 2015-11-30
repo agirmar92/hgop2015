@@ -1,5 +1,8 @@
 HGOP - Report
 ==========
+
+# Tól
+
 Lítil umfjöllun um þau tól sem ég nýti mér í þessu verkefni til að ná fram sjálfvirknivæðingu hugbúnaðar þróunar.
 
 #### Vagrant
@@ -18,4 +21,70 @@ Npm er pakkastjóri, en með því er auðveldlega hægt að sækja utanaðkoman
 NodeJS er JavaScript keyrslu umhverfi sem keyrir í Javascript (V8) sýndarvél. NodeJs er ekið áfram af atburðum (event driven) og eins þráðar (single threaded) svo eitthvað sé nefnt. NodeJs er vinsæll valkostur þegar kemur að þróun vefþjónusta/bakenda.
 
 #### bower
-Bower tólið er ekki ósvipað npm, sér um að sækja söfn/pakka/viðbætur um viðhalda ánauðum kerfis. Helsti mismunur tólanna er að Npm er yfirleitt notað fyrir pakka sem tengjast Nodejs (bakenda kerfis) á meðan Bower er notað fyrir þróun framenda.
+Bower tólið er ekki ósvipað npm, sér um að sækja söfn/pakka/viðbætur um viðhalda ánauðum kerfis. Helsti mismunur tólanna er að Npm er yfirleitt notað fyrir pakka sem tengjast Nodejs (bakenda kerfis) á meðan Bower er notað fyrir pakka til þróunar framenda.
+
+# Deployment path
+Til að allt gangi hiklaust fyrir sig þurfa báðar vélarna að vera keyrandi, en af þær eru það ekki er hægt að keyra `vagrant up` í þeirri möppu sem Vagrantfile skjalið er staðsett.
+
+## dockerbuild.sh
+Script sem byggir kerfið upp og keyrir prófanir, ef allt gengur upp þá er búin til Docker image. Áður en þessi scripta er keyrð þarf að vera búið að niðurhala öllum ánuðum kerfisins, en það er gert með `npm install` og eftir það `bower install`. Einnig þarf að búa til aðgang á Docker Hub og skrá sig inn með `docker login`, eftir það þarf þá breyta *{notendanafn}* í scriptunni í það notendanafn sem þú valdir þér.
+
+``` shell
+#!/bin/bash -e
+
+echo Cleaning...
+rm -rf ./dist
+
+echo Building app
+grunt
+
+cp ./Dockerfile ./dist/
+
+cd dist
+npm install --production
+
+echo Building docker image
+docker build -t {notendanafn}/tictactoe .
+
+echo "Done"
+
+```
+
+## dockerpush.sh
+Script sem ýtir nýjustu útgáfu Docker frá dev vélinni og sækir frá Docker og ræsir á test vélinni, ætti að vera keyrð eftir dockerbuild.sh ef allt gekk upp. Til að scriptan virki þarf test vélin að hafa ip slóðina 192.168.33.10 (í þessu tilfelli), það er gert með því að bæta þessari línu við í Vagrantfile test vélarinnar:
+`config.vm.network "private_network", ip: "192.168.33.10"`
+
+Einnig þarf að bæta við dev vélinni í hóp þeirra véla sem test vélin treystir, og þarf þar af leiðandi ekki að auðkenna sig ef hún reynir að hafa aðgang af sér í gegnum SSH tengingu. Ég náði þessu fram með [þessum](http://www.linuxproblem.org/art_9.html) leiðbeiningum, mjög skýrar og þægilegar.
+
+``` shell
+#!/bin/bash -e
+
+echo "______________________________________"
+
+echo Pushing docker image
+docker push {notendanafn}/tictactoe
+echo "______________________________________"
+
+echo \(TestMachine\) Stopping and removing old processes
+ssh 192.168.33.10 'docker stop $(docker ps -a -q)'
+ssh 192.168.33.10 'docker rm $(docker ps -a -q)'
+echo "______________________________________"
+
+echo \(TestMachine\) Pulling docker image
+ssh 192.168.33.10 'docker pull {notendanafn}/tictactoe'
+echo "______________________________________"
+
+echo \(TestMachine\) Starting the new image
+ssh 192.168.33.10 'docker run -p 9000:8080 -d -e "NODE_ENV=production" {notendanafn}/tictactoe'
+echo "______________________________________"
+
+echo "Done"
+```
+#### Skref fyrir skref
+Allar skipanir með forskeytinu `ssh 192.168.33.10` eru keyrðar á test vélinni með SSH tengingu frá dev vélinni.
+
+1. `docker push {notendanafn}/tictactoe`: Ýtir nýjustu útgáfu af docker image kerfisins á Docker Hub.
+2. `ssh 192.168.33.10 'docker stop $(docker ps -a -q)'`: Stöðvar alla fyrrum Docker gáma.
+3. `ssh 192.168.33.10 'docker rm $(docker ps -a -q)'`: Eyðir öllum fyrrum Docker gámum.
+4. `ssh 192.168.33.10 'docker pull {notendanafn}/tictactoe'`: Sækir nýjustu docker image kerfisins frá Docker Hub.
+5. `ssh 192.168.33.10 'docker run -p 9000:8080 -d -e "NODE_ENV=production" {notendanafn}/tictactoe'`: Keyrir upp nýjan gám með nýsóttu docker image kerfisins.
