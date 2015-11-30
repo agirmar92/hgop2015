@@ -27,6 +27,6 @@ describe('Controller: MainCtrl', function () {
   });
 
   it('should FAIL', function() {
-    expect(4).toBe(2);
+    expect(4).toBe(200);
   });
 });
