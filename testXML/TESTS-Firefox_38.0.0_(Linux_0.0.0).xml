@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<testsuite name="Firefox 38.0.0 (Linux 0.0.0)" package="" timestamp="2015-12-01T16:21:34" id="0" hostname="centos-nodejs-dev" tests="1" errors="0" failures="0" time="0.032">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0"/>
+  </properties>
+  <testcase name="should attach a list of things to the scope" time="0.032" classname="Firefox_38_0_0_(Linux_0_0_0).Controller: MainCtrl"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>
