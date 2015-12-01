@@ -5,6 +5,7 @@ echo Cleaning...
 rm -rf ./dist
 
 echo Building app
+npm install
 grunt
 
 cp ./Dockerfile ./dist/
