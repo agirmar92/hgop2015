@@ -1,4 +1,8 @@
 var _ = require('lodash');
 module.exports = function tictactoeCommandHandler(events) {
-  // TODO
+  return {
+    executeCommand: function(cmd) {
+      return [];
+    }
+  }
 };

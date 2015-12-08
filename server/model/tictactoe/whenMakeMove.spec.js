@@ -71,6 +71,10 @@ describe('when make move command', function() {
         side: 'X',
         timeStamp: "2015.05.07T09:18:25"
       }];
+
+      var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
+
+      JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
     });
   });
 
@@ -344,10 +348,10 @@ describe('when make move command', function() {
         side: 'O',
         timeStamp: "2015.05.07T09:19:35"
       }];
+
+      var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
+
+      JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
     });
-
-    var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
-
-    JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
   });
 });
