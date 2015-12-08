@@ -2,6 +2,18 @@ var _ = require('lodash');
 module.exports = function tictactoeCommandHandler(events) {
   return {
     executeCommand: function(cmd) {
+      if (cmd.comm === "MakeMove") {
+        return [{
+          id: "123",
+          event: "MoveMade",
+          userName: "Agirmar",
+          name: "InitialGame",
+          x: 1,
+          y: 1,
+          side: "X",
+          timeStamp: "2015.05.07T09:18:25"
+        }];
+      }
       if (cmd.comm === "CreateGame") {
         return [{
           id: cmd.id,
