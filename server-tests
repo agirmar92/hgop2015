@@ -1,0 +1,41 @@
+
+[0m[0m
+Express server listening on 9000, in test mode
+[0m  GET /api/gameHistory[0m
+[90mPOST /api/createGame [32m200 [90m15ms - 2b[0m
+[90mGET /api/gameHistory/999 [32m200 [90m3ms - 6b[0m
+[2K[0G  [31m  1) should respond with JSON array with created events for game[0m
+
+[0m  In memory store[0m
+[2K[0G  [32m  ✓[0m[90m Should return empty array for unknown id [0m
+[2K[0G  [32m  ✓[0m[90m Should return events previously stored [0m
+[2K[0G  [32m  ✓[0m[90m should append stored events to events previously stored [0m
+
+[0m  tictactoe game context[0m
+[2K[0G  [32m  ✓[0m[90m should route command to instantiated tictactoe game with event stream from store and return and store generated events. Test using fakes/stubs. [0m
+[2K[0G  [32m  ✓[0m[90m should route command to instantiated tictactoe game with event stream from store and return generated events, using mock style tests. [0m
+
+[0m  create game command[0m
+[2K[0G  [31m  2) should create game[0m
+[2K[0G  [31m  3) should create game with another user another time[0m
+
+[0m  join game command[0m
+[2K[0G  [31m  4) should join game[0m
+[2K[0G  [31m  5) should reject joining of a non-existing game[0m
+[2K[0G  [31m  6) should reject joining a full game[0m
+
+[0m  when make move command[0m
+[0m    on new game[0m
+[2K[0G    [31m  7) should make the first move[0m
+[2K[0G    [32m  ✓[0m[90m should get invalid move message, trying to make a move outside the board [0m
+[0m    one previous move[0m
+[2K[0G    [31m  8) should get invalid move message, trying to make a move already made[0m
+[0m    game in progress[0m
+[2K[0G    [32m  ✓[0m[90m should make a move and X wins [0m
+[2K[0G    [32m  ✓[0m[90m should make a move and O wins [0m
+[0m    game in progress, to be a draw[0m
+[2K[0G    [32m  ✓[0m[90m should make a move and draw the game [0m
+
+
+[92m [0m[32m 9 passing[0m[90m (145ms)[0m
+
