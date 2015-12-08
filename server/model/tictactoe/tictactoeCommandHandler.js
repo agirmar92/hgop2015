@@ -1,5 +1,17 @@
 var _ = require('lodash');
 module.exports = function tictactoeCommandHandler(events) {
+
+  var gameState = {
+    gameCreatedEvent : events[0],
+    board: [['','',''],['','',''],['','','']]
+  };
+
+  _.each(events, function(event){
+    if (event.event === "MoveMade") {
+      gameState.board[event.x][event.y] = event.side;
+    }
+  });
+
   return {
     executeCommand: function(cmd) {
       if (cmd.comm === "MakeMove") {
@@ -16,6 +28,8 @@ module.exports = function tictactoeCommandHandler(events) {
 
         if ((cmd.x < 0 || cmd.x > 3) || (cmd.y < 0 || cmd.y > 3)) {
           reply[0].event = "IllegalMove (out of bounds)";
+        } else if (gameState.board[cmd.x][cmd.y] !== '') {
+          reply[0].event = "IllegalMove (move already made)";
         } else {
           reply[0].event = "MoveMade";
         }
