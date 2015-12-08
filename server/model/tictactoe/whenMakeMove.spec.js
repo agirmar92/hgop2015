@@ -257,9 +257,9 @@ describe('when make move command', function() {
         GIVEN
         O X O
         X X O
-        * * X
+        * O X
     */
-    beforeEach(function() {
+    it('should make a move and draw the game', function() {
       given = [{
         id: "123",
         event: "MoveMade",
@@ -323,30 +323,37 @@ describe('when make move command', function() {
         y: 2,
         side: 'X',
         timeStamp: "2015.05.07T09:19:30"
-      }];
-    });
-
-    it('should make a move and draw the game', function() {
-      when = {
+      }, {
         id: "654321",
-        comm: "MakeMove",
+        event: "MoveMade",
         userName: "Gummi",
         name: "InitialGame",
         x: 1,
         y: 2,
         side: 'O',
         timeStamp: "2015.05.07T09:19:35"
+      }];
+
+      when = {
+        id: "1234567",
+        comm: "MakeMove",
+        userName: "Agirmar",
+        name: "InitialGame",
+        x: 0,
+        y: 2,
+        side: 'X',
+        timeStamp: "2015.05.07T09:19:40"
       };
 
       then = [{
-        id: "654321",
+        id: "1234567",
         event: "DrawMoveMade",
-        userName: "Gummi",
+        userName: "Agirmar",
         name: "InitialGame",
-        x: 1,
+        x: 0,
         y: 2,
-        side: 'O',
-        timeStamp: "2015.05.07T09:19:35"
+        side: 'X',
+        timeStamp: "2015.05.07T09:19:40"
       }];
 
       var actualEvents = tictactoeCommandHandler(given).executeCommand(when);

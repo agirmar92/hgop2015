@@ -3,11 +3,13 @@ module.exports = function tictactoeCommandHandler(events) {
 
   var gameState = {
     gameCreatedEvent : events[0],
-    board: [['','',''],['','',''],['','','']]
+    board: [['','',''],['','',''],['','','']],
+    movesMade: 0
   };
 
   var makeMove = function(x, y, side) {
     gameState.board[x][y] = side;
+    gameState.movesMade++;
   }
 
   _.each(events, function(event){
@@ -36,13 +38,19 @@ module.exports = function tictactoeCommandHandler(events) {
       return 1;
     }
 
-    for (var i = 0; i < 3; i++) {
-      for (var k = 0; k < 3; k++) {
-        if (gameState.board[i][k] === '')
-          return 0;
-      }
+    // Check for a draw
+    if (gameState.movesMade === 9)
+      return 2;
+
+    // Not finished
+    return 0;
+  }
+
+  // For debugging purposes
+  var printBoard = function() {
+    for(var i = 0; i < 3; i++) {
+      console.log(gameState.board[0][i] + " " + gameState.board[1][i] + " " + gameState.board[2][i]); 
     }
-    return 2;
   }
 
   return {
@@ -72,7 +80,7 @@ module.exports = function tictactoeCommandHandler(events) {
           } else if (finished === 1) {
             reply[0].event = "WinningMoveMade";
           } else if (finished === 2) {
-            reply[0].event = "Derksadasd";
+            reply[0].event = "DrawMoveMade";
           }
         }
         
