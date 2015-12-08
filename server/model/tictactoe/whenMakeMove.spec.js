@@ -202,6 +202,10 @@ describe('when make move command', function() {
         side: 'X',
         timeStamp: "2015.05.07T09:19:30"
       }];
+
+      var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
+
+      JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
     });
 
     it('should make a move and O wins', function() {
@@ -237,6 +241,10 @@ describe('when make move command', function() {
         side: 'O',
         timeStamp: "2015.05.07T09:19:35"
       }];
+
+      var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
+
+      JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
     });
   });
 
@@ -337,5 +345,9 @@ describe('when make move command', function() {
         timeStamp: "2015.05.07T09:19:35"
       }];
     });
+
+    var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actualEvents).should.be.exactly(JSON.stringify(then));
   });
 });
