@@ -79,7 +79,7 @@ describe('join game command', function() {
     then = [{
       id: "987654",
       event: "GameIsFull",
-      userName: "Gummi",
+      userName: "Bjarni",
       name: "InitialGame",
       timeStamp: "2015.05.07T09:17:45"
     }];
