@@ -11,6 +11,15 @@ module.exports = function tictactoeCommandHandler(events) {
           name: cmd.name
         }];
       } else {
+        if (!events[0]) {
+          return [{
+            id: cmd.id,
+            event: "GameDoesNotExist",
+            name: cmd.name,
+            userName: cmd.userName,
+            timeStamp: cmd.timeStamp
+          }];
+        }
         return [{
           id: cmd.id,
           event: "GameJoined",
