@@ -53,77 +53,85 @@ module.exports = function tictactoeCommandHandler(events) {
     }
   }
 
+  var handlers = {
+    "MakeMove": function(cmd) {
+      var reply = [{
+        id: cmd.id,
+        event: "",
+        userName: cmd.userName,
+        name: cmd.name,
+        x: cmd.x,
+        y: cmd.y,
+        side: cmd.side,
+        timeStamp: cmd.timeStamp
+      }];
+
+      if ((cmd.x < 0 || cmd.x > 3) || (cmd.y < 0 || cmd.y > 3)) {
+        reply[0].event = "IllegalMove (out of bounds)";
+      } else if (gameState.board[cmd.x][cmd.y] !== '') {
+        reply[0].event = "IllegalMove (move already made)";
+      } else {
+        makeMove(cmd.x, cmd.y, cmd.side);
+        var finished = isFinished(cmd.x, cmd.y, cmd.side);
+
+        if (finished === 0) {
+          reply[0].event = "MoveMade";
+        } else if (finished === 1) {
+          reply[0].event = "WinningMoveMade";
+        } else if (finished === 2) {
+          reply[0].event = "DrawMoveMade";
+        }
+      }
+      
+      return reply;
+    },
+
+    "CreateGame": function(cmd) {
+      return [{
+        id: cmd.id,
+        event: "GameCreated",
+        gameId: cmd.gameId,
+        userName: cmd.userName,
+        timeStamp: cmd.timeStamp,
+        name: cmd.name
+      }];
+    },
+
+    "JoinGame": function(cmd) {
+      if (!events[0]) {
+        return [{
+          id: cmd.id,
+          event: "GameDoesNotExist",
+          name: cmd.name,
+          userName: cmd.userName,
+          timeStamp: cmd.timeStamp
+        }];
+      }
+      if (events[1]) {
+        return [{
+          id: cmd.id,
+          event: "GameIsFull",
+          userName: cmd.userName,
+          name: cmd.name,
+          timeStamp: cmd.timeStamp
+        }];
+      }
+      return [{
+        id: cmd.id,
+        event: "GameJoined",
+        userName: cmd.userName,
+        otherUserName: events[0].userName,
+        name: cmd.name,
+        timeStamp: cmd.timeStamp
+      }];
+    }
+  };
+
   return {
     executeCommand: function(cmd) {
-      if (cmd.comm === "MakeMove") {
-        var reply = [{
-          id: cmd.id,
-          event: "",
-          userName: cmd.userName,
-          name: cmd.name,
-          x: cmd.x,
-          y: cmd.y,
-          side: cmd.side,
-          timeStamp: cmd.timeStamp
-        }];
-
-        if ((cmd.x < 0 || cmd.x > 3) || (cmd.y < 0 || cmd.y > 3)) {
-          reply[0].event = "IllegalMove (out of bounds)";
-        } else if (gameState.board[cmd.x][cmd.y] !== '') {
-          reply[0].event = "IllegalMove (move already made)";
-        } else {
-          makeMove(cmd.x, cmd.y, cmd.side);
-          var finished = isFinished(cmd.x, cmd.y, cmd.side);
-
-          if (finished === 0) {
-            reply[0].event = "MoveMade";
-          } else if (finished === 1) {
-            reply[0].event = "WinningMoveMade";
-          } else if (finished === 2) {
-            reply[0].event = "DrawMoveMade";
-          }
-        }
-        
-        return reply;
-      }
-
-      if (cmd.comm === "CreateGame") {
-        return [{
-          id: cmd.id,
-          event: "GameCreated",
-          gameId: cmd.gameId,
-          userName: cmd.userName,
-          timeStamp: cmd.timeStamp,
-          name: cmd.name
-        }];
-      } else {
-        if (!events[0]) {
-          return [{
-            id: cmd.id,
-            event: "GameDoesNotExist",
-            name: cmd.name,
-            userName: cmd.userName,
-            timeStamp: cmd.timeStamp
-          }];
-        }
-        if (events[1]) {
-          return [{
-            id: cmd.id,
-            event: "GameIsFull",
-            userName: cmd.userName,
-            name: cmd.name,
-            timeStamp: cmd.timeStamp
-          }];
-        }
-        return [{
-          id: cmd.id,
-          event: "GameJoined",
-          userName: cmd.userName,
-          otherUserName: events[0].userName,
-          name: cmd.name,
-          timeStamp: cmd.timeStamp
-        }];
-      }
+      var handlerToRun = handlers[cmd.comm];
+      if (handlerToRun)
+        return handlerToRun(cmd);
     }
   }
 };
