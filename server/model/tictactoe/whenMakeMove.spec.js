@@ -142,7 +142,7 @@ describe('when make move command', function() {
         userName: "Gummi",
         name: "InitialGame",
         x: 2,
-        y: 2,
+        y: 0,
         side: 'O',
         timeStamp: "2015.05.07T09:19:05"
       }, {
