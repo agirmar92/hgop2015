@@ -3,16 +3,24 @@ module.exports = function tictactoeCommandHandler(events) {
   return {
     executeCommand: function(cmd) {
       if (cmd.comm === "MakeMove") {
-        return [{
-          id: "123",
-          event: "MoveMade",
-          userName: "Agirmar",
-          name: "InitialGame",
-          x: 1,
-          y: 1,
-          side: "X",
-          timeStamp: "2015.05.07T09:18:25"
+        var reply = [{
+          id: cmd.id,
+          event: "",
+          userName: cmd.userName,
+          name: cmd.name,
+          x: cmd.x,
+          y: cmd.y,
+          side: cmd.side,
+          timeStamp: cmd.timeStamp
         }];
+
+        if ((cmd.x < 0 || cmd.x > 3) || (cmd.y < 0 || cmd.y > 3)) {
+          reply[0].event = "IllegalMove (out of bounds)";
+        } else {
+          reply[0].event = "MoveMade";
+        }
+        
+        return reply;
       }
       if (cmd.comm === "CreateGame") {
         return [{
