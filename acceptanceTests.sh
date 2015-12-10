@@ -8,7 +8,7 @@ fi
 
 echo "______________________________________"
 echo "Exporting api URL for testing = $1:$2"
-export ACCEPTANCE_URL=http://192.168.33.10:9000
+export ACCEPTANCE_URL=http://$1:$2
 
 echo "______________________________________"
 echo "Running acceptance tests"
