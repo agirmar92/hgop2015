@@ -11,7 +11,7 @@ describe('TEST ENV GET /api/gameHistory', function () {
     acceptanceUrl.should.be.ok;
   });
 
-  it('should execute same test using old style', function (done) {
+  it('Should execute same test using old style', function (done) {
 
     var command =     {
       id : "1234",
@@ -52,10 +52,10 @@ describe('TEST ENV GET /api/gameHistory', function () {
 
 
    it('Should execute fluid API test', function (done) {
-     /*
-     given(user("YourUser").createsGame("TheFirstGame"))
-     .expect("GameCreated").withName("TheFirstGame").isOk(done);
-      */
+     
+     given(user("Agirmar").createsGame("BestGameEver"))
+     .expect("GameCreated").withName("BestGameEver").isOk(done);
+      
      done();
    });
 
