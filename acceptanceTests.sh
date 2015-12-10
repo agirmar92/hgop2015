@@ -6,9 +6,6 @@ if [ $# != 2 ]; then
 	exit
 fi
 
-npm install
-bower install
-
 echo "______________________________________"
 echo "Exporting api URL for testing = $1:$2"
 export ACCEPTANCE_URL=http://192.168.33.10:9000
