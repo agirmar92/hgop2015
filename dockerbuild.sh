@@ -1,5 +1,5 @@
 #!/bin/bash -e
-export PATH=/usr/local/bin:/path/to/node:/path/to/node_bin:/path/to/phantomjs:/path/to/jscoverage:$PATH;
+#export PATH=/usr/local/bin:/path/to/node:/path/to/node_bin:/path/to/phantomjs:/path/to/jscoverage:$PATH;
 
 if [ "$1" == "" ]; then
 	echo "Usage: ./dockerbuild.sh <docker username>"

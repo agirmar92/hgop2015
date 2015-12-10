@@ -84,7 +84,7 @@ module.exports = function tictactoeCommandHandler(events) {
       }
       
       return reply;
-    },
+    }, 
 
     "CreateGame": function(cmd) {
       return [{

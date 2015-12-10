@@ -7,7 +7,7 @@ var request = require('supertest');
 describe('GET /api/gameHistory', function () {
 
   it('should respond with JSON array with created events for game', function (done) {
-    var command =     {
+    var command =  {
       id : "1234",
       gameId : "999",
       comm: "CreateGame",

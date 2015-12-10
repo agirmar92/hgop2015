@@ -1,0 +1,10 @@
+
+[0m[0m
+[0m  TEST ENV GET /api/gameHistory[0m
+[2K[0G  [32m  ✓[0m[90m Should have ACCEPTANCE_URL environment variable exported. [0m
+[2K[0G  [32m  ✓[0m[90m should execute same test using old style [0m[33m(68ms)[0m
+[2K[0G  [32m  ✓[0m[90m Should execute fluid API test [0m
+
+
+[92m [0m[32m 3 passing[0m[90m (83ms)[0m
+
