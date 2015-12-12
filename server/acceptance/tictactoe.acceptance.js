@@ -50,55 +50,62 @@ describe('TEST ENV GET /api/gameHistory', function () {
       });
   });
 
-
-   it('Should execute fluid API test', function (done) {
-     
-     given(user("Agirmar").createsGame("BestGameEver"))
-     .expect("GameCreated").withName("BestGameEver").isOk(done);
-      
-     //done();
-   });
+	it('Should execute fluid API test - same as above', function (done) {
+		given(user("Siggi").createsGame("ElitesOnly").withId("555")).sendTo("/api/createGame").expect(200).and(/json/).when(done);
+	});
 
 	var given = function(command) {
 
+		console.log(command);
+
 		var cmd = command;
-		var response = {};
-		var toCheck = {
-			key: "",
-			value: ""
-		};
+		var expectations = [];
+		var destination;
 		
 		var givenApi = {
 			expect: function(event) {
-				response = event;
+				expectations.push(event);
 				return givenApi;
 			},
 
-			withName: function(gameName) {
-				toCheck.key = "name";
-				toCheck.value = gameName;
+			sendTo: function(dest) {
+				destination = dest;
 				return givenApi;
 			},
 
-			isOk: function(done) {
-				// logic goes here
+			and: function(event) {
+				return givenApi.expect(event);
+			},
+
+			when: function(done) {
+				// Logic goes here
 				var req = request(acceptanceUrl);
 				req
-					.post('/api/createGame')
+					.post(destination)
 					.type('json')
-					.send(cmd)
+					.send(command)
 					.end(function (err, res) {
 						if (err) return done(err);
 						request(acceptanceUrl)
 						.get('/api/gameHistory/555')
-						.expect(200)
-						.expect('Content-Type', /json/)
+						.expect(expectations[0])
+						.expect('Content-Type', expectations[1])
 						.end(function (err, res) {
 							if (err) return done(err);
-							should(res.body[0].name).eql("BestGameEver");
+							res.body.should.be.instanceof(Array);
+							should(res.body).eql(
+							[{
+								"id": "1234",
+								"gameId": "555",
+								"event": "GameCreated",
+								"userName": "Siggi",
+								"name": "ElitesOnly",
+								"timeStamp": "2015-12-02T11:11:29"
+							}]);
 							done();
 						});
 					});
+				done();
 			}
 		}
 
@@ -107,20 +114,23 @@ describe('TEST ENV GET /api/gameHistory', function () {
 
 	var user = function(userName) {
 
-		var cmdInfo = {};
-
 		var userApi = {
 			createsGame: function(gameName) {
-				return {
-					id: "1234",
-					gameId: "555",
-					comm: "CreateGame",
-					userName: userName,
-					name: gameName,
-					timeStamp: "2015-12-02T11:11:29"
-				}
+				var createGameApi = {
+					withId: function(id) {
+						return {
+							id: "1234",
+							gameId: id,
+							comm: "CreateGame",
+							userName: userName,
+							name: gameName,
+							timeStamp: "2015-12-02T11:11:29"
+						};
+					}
+				};
+				return createGameApi;
 			}
-		}
+		};
 
 	   return userApi;
 	}
