@@ -55,7 +55,7 @@ describe('TEST ENV GET /api/gameHistory', function () {
 	});
 
 	it('Should play a game until drawn', function (done) {
-		/*var player1 = "John";
+		var player1 = "John";
 		var player2 = "Matthew";
 
 		given(
@@ -69,8 +69,8 @@ describe('TEST ENV GET /api/gameHistory', function () {
 			.and(player2).makesMove(2,1)
 			.and(player1).makesMove(2,2)
 			.and(player2).makesMove(1,2)
-		).sendTo("/api/createGame")
-		.expect();*/
+		).expect("DrawModeMade").byUser(player2)
+		.isOk(done);
 	});
 
 	var given = function(command) {
