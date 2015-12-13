@@ -69,7 +69,8 @@ describe('TEST ENV GET /api/gameHistory', function () {
 			.and(player2).makesMove(2,1)
 			.and(player1).makesMove(2,2)
 			.and(player2).makesMove(1,2)
-		).expect("DrawModeMade").byUser(player2)
+			.and(player1).makesMove(0,2)
+		).expect("DrawModeMade").byUser(player1)
 		.isOk(done);
 	});
 
