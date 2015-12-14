@@ -88,3 +88,8 @@ Allar skipanir með forskeytinu `ssh 192.168.33.10` eru keyrðar á test vélinn
 3. `ssh 192.168.33.10 'docker rm $(docker ps -a -q)'`: Eyðir öllum fyrrum Docker gámum.
 4. `ssh 192.168.33.10 'docker pull {notendanafn}/tictactoe'`: Sækir nýjustu docker image kerfisins frá Docker Hub.
 5. `ssh 192.168.33.10 'docker run -p 9000:8080 -d -e "NODE_ENV=production" {notendanafn}/tictactoe'`: Keyrir upp nýjan gám með nýsóttu docker image kerfisins.
+
+## Load/Capacity tests
+Eftir Acceptance prófanirnar keyrir Jenkins load/capacity prófanir, til að athuga hvernig þjónninn höndlar álag á þeirri vél sem keyrt er á. Fyrst lét ég þjóninn spila 1000 leiki og höndlaði hann það ekki nægilega vel, það tók hann vel upp í 30-40 sekúndur. Ég fækkaði leikjunum alveg niður í 200, en þá var þjónninn farinn að geta spilað þá á ásættanlegum tíma. Ég keyrði prófinn nokkrum sinnum og yfirleitt var hann 5 sekúndur, hann fór einu sinni upp í 6 svo ég setti þröskuldinn 25% hærra en það, á 7,5 sekúndur (7500 millisekúndur). Ef það tekur þjóninn lengur en það að spila 200 leiki stenst hann ekki prófanir og framleiðslulínan stöðvar.
+
+Leikirnir 200 eru spilaðir "samtímis", þ.e. það er ekki spilað allan fyrsta leikinn út til enda áður en leikur númer tvö byrjar. Þar sem við erum að keyra í NodeJS og það er eins þráðar (single threaded) og keyrir asynchronous, þá heldur forritið áfram að senda skipanir á þjóninn þó svo að hann hafi ekki endilega klárað að framkvæma síðasta kall.
