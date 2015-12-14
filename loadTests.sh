@@ -11,8 +11,8 @@ echo "Exporting api URL for testing = $1:$2"
 export ACCEPTANCE_URL=http://$1:$2
 
 echo "______________________________________"
-echo "Running acceptance tests"
-grunt mochaTest:acceptance
+echo "Running load/capacity tests"
+grunt mochaTest:load
 
 echo "______________________________________"
 echo "Restarting server before next stage"

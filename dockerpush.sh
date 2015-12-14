@@ -24,4 +24,3 @@ echo \(TestMachine\) Starting the new image
 ssh "$2" 'docker run -p 9000:8080 -d -e "NODE_ENV=production" agirmar/tictactoe'
 echo "______________________________________"
 
-echo "Done"
