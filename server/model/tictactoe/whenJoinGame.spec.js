@@ -8,6 +8,7 @@ describe('join game command', function() {
     given = [{
       id: "987",
       event: "GameCreated",
+      gameId: "1212",
       userName: "Agirmar",
       timeStamp: "2015.05.07T09:15:22",
       name: "InitialGame"
@@ -15,6 +16,7 @@ describe('join game command', function() {
     when = {
       id: "9876",
       comm: "JoinGame",
+      gameId: "1212",
       userName: "Gummi",
       name: "InitialGame",
       timeStamp: "2015.05.07T09:17:35"
@@ -22,6 +24,7 @@ describe('join game command', function() {
     then = [{
       id: "9876",
       event: "GameJoined",
+      gameId: "1212",
       userName: "Gummi",
       otherUserName: "Agirmar",
       name: "InitialGame",
@@ -38,6 +41,7 @@ describe('join game command', function() {
     when = {
       id: "9876",
       comm: "JoinGame",
+      gameId: "12",
       userName: "Gummi",
       name: "InitialGame",
       timeStamp: "2015.05.07T09:17:35"
@@ -45,6 +49,7 @@ describe('join game command', function() {
     then = [{
       id: "9876",
       event: "GameDoesNotExist",
+      gameId: "12",
       name: "InitialGame",
       userName: "Gummi",
       timeStamp: "2015.05.07T09:17:35"
@@ -59,12 +64,14 @@ describe('join game command', function() {
     given = [{
       id: "987",
       event: "GameCreated",
+      gameId: "10",
       userName: "Agirmar",
       timeStamp: "2015.05.07T09:15:22",
       name: "InitialGame"
     }, {
       id: "9876",
       event: "GameJoined",
+      gameId: "10",
       userName: "Gummi",
       otherUserName: "Agirmar",
       timeStamp: "2015.05.07T09:17:35"
@@ -72,6 +79,7 @@ describe('join game command', function() {
     when = {
       id: "987654",
       comm: "JoinGame",
+      gameId: "10",
       userName: "Bjarni",
       name: "InitialGame",
       timeStamp: "2015.05.07T09:17:45"
@@ -79,6 +87,7 @@ describe('join game command', function() {
     then = [{
       id: "987654",
       event: "GameIsFull",
+      gameId: "10",
       userName: "Bjarni",
       name: "InitialGame",
       timeStamp: "2015.05.07T09:17:45"

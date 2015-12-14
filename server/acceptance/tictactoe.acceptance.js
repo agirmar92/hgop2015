@@ -3,6 +3,8 @@
 var should = require('should');
 var request = require('supertest');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
+var given = require('../fluid-api/tictactoeFluidApi').given;
+var user = require('../fluid-api/tictactoeFluidApi').user;
 
 
 describe('TEST ENV GET /api/gameHistory', function () {
@@ -51,16 +53,38 @@ describe('TEST ENV GET /api/gameHistory', function () {
   });
 
 	it('Should execute fluid API test - same as above', function (done) {
-		given(user("Siggi").createsGame("ElitesOnly").withId("555")).expect("GameCreated").withName("ElitesOnly").isOk(done);
+		var player1 = "Siggi";;
+		var gameName = "ElitesOnly";
+		var gameId = "555";
+
+		given(
+			user(player1).createsGame(gameName).withId(gameId)
+		).expect("GameCreated").withName(gameName).isOk(done);
+	});
+
+	it('Should create a game and player joins', function (done) {
+		var player1 = "Danny";
+		var player2 = "Sebastian";
+		var gameName = "GreatestGameEver";
+		var gameId = "684";
+
+		given(
+			user(player1).createsGame(gameName).withId(gameId)
+			.and(player2).joinsGame(gameName).withId(gameId)
+		).expect("GameJoined")
+		.withOtherUser(player1)
+		.isOk(done);
 	});
 
 	it('Should play a game until drawn', function (done) {
 		var player1 = "John";
 		var player2 = "Matthew";
+		var gameName = "I am undefeated";
+		var gameId = "122";
 
 		given(
-			user(player1).createsGame("I am undefeated").withId("12")
-			.and(player2).joinGame("12")
+			user(player1).createsGame(gameName).withId(gameId)
+			.and(player2).joinsGame(gameName).withId(gameId)
 			.and(player1).makesMove(1,1)
 			.and(player2).makesMove(2,0)
 			.and(player1).makesMove(0,1)
@@ -73,91 +97,4 @@ describe('TEST ENV GET /api/gameHistory', function () {
 		).expect("DrawModeMade").byUser(player1)
 		.isOk(done);
 	});
-
-	var given = function(command) {
-
-		var cmd = command;
-		var expectations = [];
-		
-		var givenApi = {
-			expect: function(eventValue) {
-				expectations.push({
-					key: "event",
-					value: eventValue
-				});
-
-				return givenApi;
-			},
-
-			and: function(event) {
-				return givenApi.expect(event);
-			},
-
-			withName: function(name) {
-				expectations.push({
-					key: "name",
-					value: name
-				});
-
-				return givenApi;
-			},
-
-			isOk: function(done) {
-				// Logic goes here
-				var req = request(acceptanceUrl);
-				req
-					.post(command.destination)
-					.type('json')
-					.send(command.data)
-					.end(function(err, res) {
-						if (err) return done(err);
-						for (var i = 0; i < expectations.length; i++) {
-							var currKey = expectations[i].key;
-							var currValue = expectations[i].value;
-
-							if (currKey === "event")
-								should(res.body[0].event).eql(currValue);
-							else if (currKey === "name")
-								should(res.body[0].name).eql(currValue);
-						}
-
-						done();
-					});
-			}
-		}
-
-		return givenApi;
-	}
-
-	var user = function(userName) {
-
-		var userApi = {
-			createsGame: function(gameName) {
-
-				var createCommand = {
-					data: {
-						id: "1234",
-						gameId: "",
-						comm: "CreateGame",
-						userName: userName,
-						name: gameName,
-						timeStamp: "2015-12-02T11:11:29"
-					},
-					destination: "/api/createGame"
-				}
-
-				var createGameApi = {
-					withId: function(id) {
-						createCommand.data.gameId = id;
-						return createCommand;
-					}
-				};
-
-				return createGameApi;
-			}
-		};
-
-	   return userApi;
-	}
-
 });
