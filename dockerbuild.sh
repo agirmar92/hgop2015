@@ -65,7 +65,7 @@ if [[ $rc != 0 ]] ; then
 fi
 
 echo Pushing docker image
-docker push "$1"/tictactoe:$GIT_COMMIT .
+docker push "$1"/tictactoe:$GIT_COMMIT
 rc=$?
 if [[ $rc != 0 ]] ; then
     echo "Docker push failed " $rc
