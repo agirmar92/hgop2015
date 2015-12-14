@@ -56,7 +56,7 @@ if [[ $rc != 0 ]] ; then
 fi
 
 echo Building docker image
-docker build -t "$1"/tictactoe .
+docker build -t "$1"/tictactoe:$GIT_COMMIT
 
 rc=$?
 if [[ $rc != 0 ]] ; then
