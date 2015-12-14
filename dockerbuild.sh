@@ -39,4 +39,10 @@ if [[ $rc != 0 ]] ; then
     exit $rc
 fi
 
+echo "______________________________________"
+
+echo Pushing docker image
+docker push "$1"/tictactoe
+
+
 echo "Done"
