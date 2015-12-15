@@ -78,11 +78,11 @@ describe('Controller: TictactoeControllerCtrl', function () {
         userName: 'Gummi',
         side: 'X'
       },
-      timeStamp: '2014-12-02T11:29:29',
       move: {
         x: 2, 
         y: 0
-      }
+      },
+      timeStamp: '2014-12-02T11:29:29'
     }).respond([
       {
         gameId: '87687',
@@ -91,11 +91,11 @@ describe('Controller: TictactoeControllerCtrl', function () {
           userName: 'Gummi',
           side: 'X'
         },
-        timeStamp: '2014-12-02T11:29:29',
         move: {
           x: 2, 
           y: 0
-        }
+        },
+        timeStamp: '2014-12-02T11:29:29'
       }
     ]);
 

@@ -60,7 +60,7 @@ describe('Factory: TictacToeState', function () {
       }]
     );
 
-    expect(gameState.board[0][1]).toBe('X');
+    expect(gameState.board[1][0]).toBe('X');
 
   });
 
