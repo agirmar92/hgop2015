@@ -4,7 +4,7 @@ var given = require('../fluid-api/tictactoeFluidApi').given;
 it('Should play 200 games in 7.5 seconds.', function (done) {
   var doneCount = 0;
   var gamesToPlay = 200;
-  var x = 7.5;
+  var x = 8;
 
   this.timeout(x * 1000);
 
