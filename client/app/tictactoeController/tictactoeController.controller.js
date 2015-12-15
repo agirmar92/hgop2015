@@ -52,8 +52,8 @@ angular.module('tictactoeApp')
           comm: 'PlaceMove',
           user: $scope.me,
           move: {
-            x: coords[0],
-            y: coords[1],
+            x: coords.x,
+            y: coords.y,
           },
           timeStamp: '2014-12-02T11:29:29'
         }

@@ -75,23 +75,26 @@ describe('Controller: TictactoeControllerCtrl', function () {
       gameId: '87687',
       comm: 'PlaceMove',
       user: {
-        userName: 'Gummi'
+        userName: 'Gummi',
+        side: 'X'
       },
       timeStamp: '2014-12-02T11:29:29',
       move: {
-        xy:{x:2, y:0},
-        side: 'X'
+        x: 2, 
+        y: 0
       }
     }).respond([
       {
+        gameId: '87687',
         event: 'MovePlaced',
         user: {
-          userName: 'Gummi'
+          userName: 'Gummi',
+          side: 'X'
         },
         timeStamp: '2014-12-02T11:29:29',
         move: {
-          xy:{x:2, y:0},
-          side: 'X'
+          x: 2, 
+          y: 0
         }
       }
     ]);
@@ -100,7 +103,10 @@ describe('Controller: TictactoeControllerCtrl', function () {
     scope.name = 'TheSecondGame';
 
     location.search('gameSide', 'X');
-    scope.me = {userName: 'Gummi'};
+    scope.me = {
+      userName: 'Gummi',
+      side: 'X'
+    };
     scope.gameState.gameId = '87687';
 
     scope.placeMove({x:2, y:0});
@@ -118,23 +124,26 @@ describe('Controller: TictactoeControllerCtrl', function () {
       gameId: '87687',
       comm: 'PlaceMove',
       user: {
-        userName: 'Gummi'
+        userName: 'Gummi',
+        side: 'O'
       },
       timeStamp: '2014-12-02T11:29:29',
       move: {
-        xy:{x:2, y:1},
-        side: 'O'
+        x: 2, 
+        y: 1
       }
     }).respond([
       {
+        gameId: '87687',
         event: 'MovePlaced',
         user: {
-          userName: 'Gummi'
+          userName: 'Gummi',
+          side: 'O'
         },
         timeStamp: '2014-12-02T11:29:29',
         move: {
-          xy:{x:2, y:1},
-          side: 'O'
+          x: 2, 
+          y: 1
         }
       }
     ]);
@@ -144,7 +153,10 @@ describe('Controller: TictactoeControllerCtrl', function () {
     scope.name = 'TheSecondGame';
     scope.gameState.nextTurn = 'O';
 
-    scope.me = {userName: 'Gummi'};
+    scope.me = {
+      userName: 'Gummi',
+      side: 'O'
+    };
     scope.gameState.gameId = '87687';
 
     scope.placeMove({x:2, y:1});
