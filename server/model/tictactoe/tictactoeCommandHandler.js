@@ -128,7 +128,19 @@ module.exports = function tictactoeCommandHandler(events) {
           timeStamp: cmd.timeStamp
         }];
       }
-      if (events[1]) {
+
+      var joinAble = false;
+      for (var i = 0; i < events.length; i++) {
+        var currEvent = events[i];
+        if (currEvent.event === "GameCreated")
+          joinAble = true;
+        if (currEvent.event === "GameJoined") {
+          joinAble = false;
+          break;
+        }
+      }
+
+      if (!joinAble) {
         return [{
           id: cmd.id,
           event: "GameIsFull",
