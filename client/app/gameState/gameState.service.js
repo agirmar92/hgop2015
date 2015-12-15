@@ -23,7 +23,7 @@ angular.module('tictactoeApp')
             },
             'MovePlaced': function (event, gameState) {
               var x = event.move.x, y = event.move.y;
-              gameState.board[x][y] = event.user.side;
+              gameState.board[y][x] = event.user.side;
               gameState.nextTurn = event.user.side === 'X' ? 'O' : 'X';
             },
             'GameWon': function (event, gameState) {
