@@ -10,15 +10,20 @@ describe('when make move command', function() {
       id: "987",
       comm: "CreateGame",
       gameId: "10",
-      userName: "Agirmar",
+      user: {
+        userName: "Agirmar",
+        side: "X"
+      },
       name: "InitialGame",
       timeStamp: "2015.05.07T09:15:22"
     }, {
       id: "9876",
       event: "GameJoined",
       gameId: "10",
-      userName: "Gummi",
-      otherUserName: "Agirmar",
+      user: {
+        userName: "Gummi",
+        side: "O"
+      },
       timeStamp: "2015.05.07T09:17:35"
     }];
   });
@@ -26,25 +31,29 @@ describe('when make move command', function() {
   describe('on new game', function() {
     it('should make the first move', function() {
       when = {
-        id: "123",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "10",
-        userName: "Agirmar",
-        name:"InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:25"
       };
       then = [{
-        id: "123",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "10",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:25"
       }];
 
@@ -55,26 +64,30 @@ describe('when make move command', function() {
 
     it('should get invalid move message, trying to make a move outside the board', function() {
       when = {
-        id: "123",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "10",
-        userName: "Agirmar",
-        name:"InitialGame",
-        x: 9,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 9,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:25"
       };
 
       then = [{
-        id: "123",
         event: "IllegalMove (out of bounds)",
         gameId: "10",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 9,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 9,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:25"
       }];
 
@@ -87,38 +100,44 @@ describe('when make move command', function() {
   describe('one previous move', function() {
     it('should get invalid move message, trying to make a move already made', function() {
       given.push({
-        id: "123",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "11",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:25"
       });
 
       when = {
-        id: "1234",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "11",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:35"
       };
 
       then = [{
-        id: "1234",
         event: "IllegalMove (move already made)",
         gameId: "11",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:18:35"
       }];
 
@@ -137,92 +156,119 @@ describe('when make move command', function() {
     */
     beforeEach(function() {
       given = [{
-        id: "123",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 0,
-        y: 0,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 0,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:00"
       }, {
-        id: "321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 2,
-        y: 0,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 2,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:05"
       }, {
-        id: "1234",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 0,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 0,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:10"
       }, {
-        id: "4321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 0,
-        y: 2,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 0,
+          y: 2
+        },
         timeStamp: "2015.05.07T09:19:15"
       }, {
-        id: "12345",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 2,
-        y: 2,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 2,
+          y: 2
+        },
         timeStamp: "2015.05.07T09:19:20"
       }, {
-        id: "54321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 2,
-        y: 1,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 2,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:25"
       }];
     });
 
     it('should make a move and X wins', function() {
       when = {
-        id: "123456",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:30"
       };
 
-      then = [{
-        id: "123456",
-        event: "WinningMoveMade",
-        gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
-        timeStamp: "2015.05.07T09:19:30"
-      }];
+      then = [
+        {
+          event: "MovePlaced",
+          gameId: "13",
+          user: {
+            userName: "Agirmar",
+            side: "X"
+          },
+          move: {
+            x: 1,
+            y: 1
+          },
+          timeStamp: "2015.05.07T09:19:30"
+        },
+        {
+          event: "GameWon",
+          gameId: "13",
+          user: {
+            userName: "Agirmar",
+            side: "X"
+          },
+          timeStamp: "2015.05.07T09:19:30"
+        }
+      ];
 
       var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
 
@@ -231,40 +277,57 @@ describe('when make move command', function() {
 
     it('should make a move and O wins', function() {
       given.push({
-        id: "123456",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 0,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:30"
       });
 
       when = {
-        id: "654321",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:35"
       };
 
-      then = [{
-        id: "654321",
-        event: "WinningMoveMade",
-        gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'O',
-        timeStamp: "2015.05.07T09:19:35"
-      }];
+      then = [
+        {
+          event: "MovePlaced",
+          gameId: "13",
+          user: {
+            userName: "Gummi",
+            side: "O"
+          },
+          move: {
+            x: 1,
+            y: 1
+          },
+          timeStamp: "2015.05.07T09:19:35"
+        },
+        {
+          event: "GameWon",
+          gameId: "13",
+          user: {
+            userName: "Gummi",
+            side: "O"
+          },
+          timeStamp: "2015.05.07T09:19:35"
+        }
+      ];
 
       var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
 
@@ -281,110 +344,141 @@ describe('when make move command', function() {
     */
     it('should make a move and draw the game', function() {
       given = [{
-        id: "123",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:00"
       }, {
-        id: "321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 2,
-        y: 0,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 2,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:05"
       }, {
-        id: "1234",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 0,
-        y: 1,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 0,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:10"
       }, {
-        id: "4321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 0,
-        y: 0,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 0,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:15"
       }, {
-        id: "12345",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 1,
-        y: 0,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 1,
+          y: 0
+        },
         timeStamp: "2015.05.07T09:19:20"
       }, {
-        id: "54321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 2,
-        y: 1,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 2,
+          y: 1
+        },
         timeStamp: "2015.05.07T09:19:25"
       }, {
-        id: "123456",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 2,
-        y: 2,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 2,
+          y: 2
+        },
         timeStamp: "2015.05.07T09:19:30"
       }, {
-        id: "654321",
-        event: "MoveMade",
+        event: "MovePlaced",
         gameId: "13",
-        userName: "Gummi",
-        name: "InitialGame",
-        x: 1,
-        y: 2,
-        side: 'O',
+        user: {
+          userName: "Gummi",
+          side: "O"
+        },
+        move: {
+          x: 1,
+          y: 2
+        },
         timeStamp: "2015.05.07T09:19:35"
       }];
 
       when = {
-        id: "1234567",
-        comm: "MakeMove",
+        comm: "PlaceMove",
         gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 0,
-        y: 2,
-        side: 'X',
+        user: {
+          userName: "Agirmar",
+          side: "X"
+        },
+        move: {
+          x: 0,
+          y: 2
+        },
         timeStamp: "2015.05.07T09:19:40"
       };
 
-      then = [{
-        id: "1234567",
-        event: "DrawMoveMade",
-        gameId: "13",
-        userName: "Agirmar",
-        name: "InitialGame",
-        x: 0,
-        y: 2,
-        side: 'X',
-        timeStamp: "2015.05.07T09:19:40"
-      }];
+      then = [
+        {
+          event: "MovePlaced",
+          gameId: "13",
+          user: {
+            userName: "Agirmar",
+            side: "X"
+          },
+          move: {
+            x: 0,
+            y: 2
+          },
+          timeStamp: "2015.05.07T09:19:40"
+        },
+        {
+          event: "GameDraw",
+          gameId: "13",
+          user: {
+            userName: "Agirmar",
+            side: "X"
+          },
+          timeStamp: "2015.05.07T09:19:40"
+        }
+      ];
 
       var actualEvents = tictactoeCommandHandler(given).executeCommand(when);
 

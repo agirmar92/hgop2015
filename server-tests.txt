@@ -2,9 +2,9 @@
 [0m[0m
 Express server listening on 9000, in test mode
 [0m  GET /api/gameHistory[0m
-[90mPOST /api/createGame [32m200 [90m8ms - 127b[0m
-[90mGET /api/gameHistory/999 [32m200 [90m3ms - 127b[0m
-[2K[0G  [32m  ✓[0m[90m should respond with JSON array with created events for game [0m[31m(88ms)[0m
+[90mPOST /api/createGame [32m200 [90m8ms - 147b[0m
+[90mGET /api/gameHistory/999 [32m200 [90m3ms - 147b[0m
+[2K[0G  [32m  ✓[0m[90m should respond with JSON array with created events for game [0m[31m(82ms)[0m
 
 [0m  In memory store[0m
 [2K[0G  [32m  ✓[0m[90m Should return empty array for unknown id [0m
@@ -37,5 +37,5 @@ Express server listening on 9000, in test mode
 [2K[0G    [32m  ✓[0m[90m should make a move and draw the game [0m
 
 
-[92m [0m[32m 17 passing[0m[90m (135ms)[0m
+[92m [0m[32m 17 passing[0m[90m (136ms)[0m
 

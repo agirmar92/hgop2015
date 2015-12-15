@@ -13,8 +13,8 @@ module.exports = function tictactoeCommandHandler(events) {
   }
 
   _.each(events, function(event){
-    if (event.event === "MoveMade") {
-      makeMove(event.x, event.y, event.side);
+    if (event.event === "MovePlaced") {
+      makeMove(event.move.x, event.move.y, event.user.side);
     }
   });
 
@@ -54,33 +54,47 @@ module.exports = function tictactoeCommandHandler(events) {
   }
 
   var handlers = {
-    "MakeMove": function(cmd) {
+    "PlaceMove": function(cmd) {
       var reply = [{
-        id: cmd.id,
         event: "",
         gameId: cmd.gameId,
-        userName: cmd.userName,
+        user: {
+          userName: cmd.user.userName,
+          side: cmd.user.side
+        },
         name: cmd.name,
-        x: cmd.x,
-        y: cmd.y,
-        side: cmd.side,
+        move: {
+          x: cmd.move.x,
+          y: cmd.move.y
+        },
         timeStamp: cmd.timeStamp
       }];
 
-      if ((cmd.x < 0 || cmd.x > 3) || (cmd.y < 0 || cmd.y > 3)) {
+      if ((cmd.move.x < 0 || cmd.move.x > 3) || (cmd.move.y < 0 || cmd.move.y > 3)) {
         reply[0].event = "IllegalMove (out of bounds)";
-      } else if (gameState.board[cmd.x][cmd.y] !== '') {
+      } else if (gameState.board[cmd.move.x][cmd.move.y] !== '') {
         reply[0].event = "IllegalMove (move already made)";
       } else {
-        makeMove(cmd.x, cmd.y, cmd.side);
-        var finished = isFinished(cmd.x, cmd.y, cmd.side);
+        makeMove(cmd.move.x, cmd.move.y, cmd.user.side);
+        var finished = isFinished(cmd.move.x, cmd.move.y, cmd.user.side);
+        reply[0].event = "MovePlaced";
 
-        if (finished === 0) {
-          reply[0].event = "MoveMade";
-        } else if (finished === 1) {
-          reply[0].event = "WinningMoveMade";
-        } else if (finished === 2) {
-          reply[0].event = "DrawMoveMade";
+        if (finished) {
+          reply.push({
+            event: "",
+            gameId: cmd.gameId,
+            user: {
+              userName: cmd.user.userName,
+              side: cmd.user.side
+            },
+            timeStamp: cmd.timeStamp
+          });
+
+          if (finished === 1) {
+            reply[1].event = "GameWon";
+          } else {
+            reply[1].event = "GameDraw";
+          }
         }
       }
       
@@ -92,7 +106,10 @@ module.exports = function tictactoeCommandHandler(events) {
         id: cmd.id,
         event: "GameCreated",
         gameId: cmd.gameId,
-        userName: cmd.userName,
+        user: {
+          userName: cmd.user.userName,
+          side: cmd.user.side
+        },
         timeStamp: cmd.timeStamp,
         name: cmd.name
       }];
@@ -104,8 +121,10 @@ module.exports = function tictactoeCommandHandler(events) {
           id: cmd.id,
           event: "GameDoesNotExist",
           gameId: cmd.gameId,
-          name: cmd.name,
-          userName: cmd.userName,
+          user: {
+            userName: cmd.user.userName,
+            side: cmd.user.side
+          },
           timeStamp: cmd.timeStamp
         }];
       }
@@ -114,8 +133,10 @@ module.exports = function tictactoeCommandHandler(events) {
           id: cmd.id,
           event: "GameIsFull",
           gameId: cmd.gameId,
-          userName: cmd.userName,
-          name: cmd.name,
+          user: {
+            userName: cmd.user.userName,
+            side: cmd.user.side
+          },
           timeStamp: cmd.timeStamp
         }];
       }
@@ -123,9 +144,11 @@ module.exports = function tictactoeCommandHandler(events) {
         id: cmd.id,
         event: "GameJoined",
         gameId: cmd.gameId,
-        userName: cmd.userName,
+        user: {
+          userName: cmd.user.userName,
+          side: cmd.user.side
+        },
         otherUserName: events[0].userName,
-        name: cmd.name,
         timeStamp: cmd.timeStamp
       }];
     }
