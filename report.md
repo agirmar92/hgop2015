@@ -102,4 +102,4 @@ Leikirnir 200 eru spilaðir "samtímis", þ.e. það er ekki spilað allan fyrst
 * "What was wrong with having docker push in the deployment script rather than in the dockerbuild.sh script?"
   - Það átti í raun bara ekki við (seperation of concern). Við eigum að geta nýtt deployment script-una oft, til að keyra upp kerfið á mörgum vélum, án þess að vera að ýta docker myndinni uppá dockerhub í hvert skipti, það þarf aðeins einu sinni og það er eftir að hafa byggt myndina (dockerbuild.sh).
 * "How does the "deploy any version, anywhere" build feature work? Hint: Track GIT_COMMIT"
-  - Með því að halda utan um git commit færslunúmerið við hvert build. Svo ef við viljum bakka um útgáfu, þá eigum við git commit færsluna til staðar og getum þannig sótt nákvæmlega þá útgáfu frá github.
+  - Með því að halda utan um git commit færslunúmerið við hvert build. Þegar við byggjum kerfið þá búum við til docker mynd og töggum hana með git commit færslunúmerinu, og ýtum upp á dockerhub, svo ef við viljum einhverntíman rúlla til baka í gamla útgáfu (gamalt commit) þá getum við náð í þá docker mynd með viðeigandi tag.
