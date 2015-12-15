@@ -49,8 +49,6 @@ angular.module('tictactoeApp')
       }
       var xPos = coords.x || coords[0];
       var yPos = coords.y || coords[1];
-      console.log("X: " + xPos);
-      console.log("Y: " + yPos);
       thenHandleEvents($http.post('/api/placeMove/', {
           gameId: $scope.gameState.gameId,
           comm: 'PlaceMove',
