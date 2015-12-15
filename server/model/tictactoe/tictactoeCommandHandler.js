@@ -160,7 +160,6 @@ module.exports = function tictactoeCommandHandler(events) {
           userName: cmd.user.userName,
           side: cmd.user.side
         },
-        otherUserName: events[0].userName,
         timeStamp: cmd.timeStamp
       }];
     }
