@@ -9,15 +9,18 @@ echo "Deploying revision '$2' of $1/tictactoe onto $3 $4:$5"
 echo "______________________________________"
 
 echo \(TestMachine\) Stopping and removing old processes
-ssh "$3" 'docker stop $(docker ps -a -q)'
-ssh "$3" 'docker rm $(docker ps -a -q)'
+currProcess=$(ssh $3 docker ps -a -q)
+if [ ! -z "$currProcess" ]; then
+	ssh "$3" 'docker stop $(docker ps -a -q)'
+	ssh "$3" 'docker rm $(docker ps -a -q)'
+fi
 echo "______________________________________"
 
 echo \(TestMachine\) Pulling docker image
-ssh "$3" 'docker pull $1/tictactoe:$2'
+ssh "$3" 'docker pull '$1'/tictactoe:'$2''
 echo "______________________________________"
 
 echo \(TestMachine\) Starting the new image
-ssh "$3" 'docker run -p $4:$5 -d -e "NODE_ENV=production" $1/tictactoe:$2'
+ssh "$3" 'docker run -p '$4':'$5' -d -e "NODE_ENV=production" '$1'/tictactoe:'$2''
 echo "______________________________________"
 
