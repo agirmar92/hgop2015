@@ -1,7 +1,7 @@
 HGOP - Report
 ==========
 
-# Tól
+# Dagur 1 / Tól
 
 Lítil umfjöllun um þau tól sem ég nýti mér í þessu verkefni til að ná fram sjálfvirknivæðingu hugbúnaðar þróunar.
 
@@ -23,7 +23,7 @@ NodeJS er JavaScript keyrslu umhverfi sem keyrir í Javascript (V8) sýndarvél.
 #### bower
 Bower tólið er ekki ósvipað npm, sér um að sækja söfn/pakka/viðbætur um viðhalda ánauðum kerfis. Helsti mismunur tólanna er að Npm er yfirleitt notað fyrir pakka sem tengjast Nodejs (bakenda kerfis) á meðan Bower er notað fyrir pakka til þróunar framenda.
 
-# Deployment path
+# Dagur 2 / Deployment path
 Til að allt gangi hiklaust fyrir sig þurfa báðar vélarna að vera keyrandi, en af þær eru það ekki er hægt að keyra `vagrant up` í þeirri möppu sem Vagrantfile skjalið er staðsett.
 
 ## dockerbuild.sh
@@ -89,17 +89,55 @@ Allar skipanir með forskeytinu `ssh 192.168.33.10` eru keyrðar á test vélinn
 4. `ssh 192.168.33.10 'docker pull {notendanafn}/tictactoe'`: Sækir nýjustu docker image kerfisins frá Docker Hub.
 5. `ssh 192.168.33.10 'docker run -p 9000:8080 -d -e "NODE_ENV=production" {notendanafn}/tictactoe'`: Keyrir upp nýjan gám með nýsóttu docker image kerfisins.
 
-## Load/Capacity tests
+# Dagur 9 / Load tests
 Eftir Acceptance prófanirnar keyrir Jenkins load/capacity prófanir, til að athuga hvernig þjónninn höndlar álag á þeirri vél sem keyrt er á. Fyrst lét ég þjóninn spila 1000 leiki og höndlaði hann það ekki nægilega vel, það tók hann vel upp í 30-40 sekúndur. Ég fækkaði leikjunum alveg niður í 200, en þá var þjónninn farinn að geta spilað þá á ásættanlegum tíma. Ég keyrði prófinn nokkrum sinnum og yfirleitt var hann 5 sekúndur, hann fór einu sinni upp í 6 svo ég setti þröskuldinn 25% hærra en það, á 7,5 sekúndur (7500 millisekúndur). Ef það tekur þjóninn lengur en það að spila 200 leiki stenst hann ekki prófanir og framleiðslulínan stöðvar.
 
 Uppfærsla: Það var að koma fyrir að 7,5 sekúnda var ekki nægilegur tími, svo ég jók hann upp í 8 sekúndur, það virðist vera flottur þröskuldur.
 
 Leikirnir 200 eru spilaðir "samtímis", þ.e. það er ekki spilað allan fyrsta leikinn út til enda áður en leikur númer tvö byrjar. Þar sem við erum að keyra í NodeJS og það er eins þráðar (single threaded) og keyrir asynchronous, þá heldur forritið áfram að senda skipanir á þjóninn þó svo að hann hafi ekki endilega klárað að framkvæma síðasta kall.
 
-## Dagur 10 / traceability, production env, and deploy any version
+# Dagur 10 / traceability, production env, and deploy any version
 * "What does this give us? Who would use the capability to track versions and why? Who would use capability to deploy any version and why?"
   - Þetta gefur okkur skýra heildarmynd yfir útgáfur kerfisins og sögu hverrar útgáfu. Það að halda utan um útgáfur nýtist þeim sem nota kerfið okkar í sínu eigin kerfi, sem vefþjónustu til dæmis. Fyrir þá er gott að sjá nýjar útgáfur og hvort uppfærslur brjóti kerfið þeirra til að mynda. Við sem smiðir hugbúnaðarins getum svo nýtt okkur eiginleikan að geta bakkað/uppsett gamlar útgáfur af kerfinu, til dæmis ef ný uppfærsla fer úrskeiðis þá er gott að geta bakkað í örugga útgáfu með einum músarsmell.
 * "What was wrong with having docker push in the deployment script rather than in the dockerbuild.sh script?"
   - Það átti í raun bara ekki við (seperation of concern). Við eigum að geta nýtt deployment script-una oft, til að keyra upp kerfið á mörgum vélum, án þess að vera að ýta docker myndinni uppá dockerhub í hvert skipti, það þarf aðeins einu sinni og það er eftir að hafa byggt myndina (dockerbuild.sh).
 * "How does the "deploy any version, anywhere" build feature work? Hint: Track GIT_COMMIT"
-  - Með því að halda utan um git commit færslunúmerið við hvert build. Þegar við byggjum kerfið þá búum við til docker mynd og töggum hana með git commit færslunúmerinu, og ýtum upp á dockerhub, svo ef við viljum einhverntíman rúlla til baka í gamla útgáfu (gamalt commit) þá getum við náð í þá docker mynd með viðeigandi tag.
+  - Með því að halda utan um git commit færslunúmerið við hvert build. Þegar við byggjum kerfið þá búum við til docker mynd og töggum hana með git commit færslunúmerinu, og ýtum upp á dockerhub, svo ef við viljum einhverntíman rúlla til baka í gamla útgáfu (gamalt commit) þá getum við náð í þá docker mynd með viðeigandi tag með einum músarsmell.
+
+# Wrap up / Jenkins stages and scripts
+#### Commit Stage
+Þegar þetta stig hefur lokið keyrslu á sínum scripts, þá geymir hann skránna `dist/githash.txt` sem öll hin stigin geta svo afritað til notkunar.
+``` shell
+export DISPLAY=:0
+./dockerbuild.sh agirmar $GIT_COMMIT
+```
+#### Acceptance Stage
+1) 
+``` shell
+export GIT_UPSTREAM_HASH=$(<dist/githash.txt)
+env
+chmod +x dockerdeploy.sh
+./dockerdeploy.sh agirmar $GIT_UPSTREAM_HASH 192.168.33.10 9000
+```
+2)
+``` shell
+sudo npm install
+./acceptanceTests.sh 192.168.33.10 9000
+```
+#### Load Stage
+``` shell
+chmod +x loadTests.sh
+sudo npm install
+./loadTests.sh 192.168.33.10 9000
+```
+
+#### Deploy Product
+``` shell
+export GIT_UPSTREAM_HASH=$(<dist/githash.txt)
+env
+chmod +x dockerdeploy.sh
+./dockerdeploy.sh agirmar $GIT_UPSTREAM_HASH 192.168.33.10 9001
+```
+
+#### The pipeline
+![alt tag](https://github.com/agirmar92/hgop2015/blob/master/images/pipeline.png)
