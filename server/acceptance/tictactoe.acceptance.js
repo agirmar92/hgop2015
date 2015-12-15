@@ -20,7 +20,10 @@ describe('TEST ENV GET /api/gameHistory', function () {
       id : "1234",
       gameId : "999",
       comm: "CreateGame",
-      userName: "Gulli",
+      user: {
+      	userName: "Gulli",
+      	side: "X"
+      },
       name: "TheFirstGame",
       timeStamp: "2014-12-02T11:29:29"
     };
@@ -44,7 +47,10 @@ describe('TEST ENV GET /api/gameHistory', function () {
                 "id": "1234",
                 "gameId": "999",
                 "event": "GameCreated",
-                "userName": "Gulli",
+                "user": {
+                	"userName": "Gulli",
+                	"side": "X"	
+                },
                 "name": "TheFirstGame",
                 "timeStamp": "2014-12-02T11:29:29"
               }]);
@@ -54,7 +60,10 @@ describe('TEST ENV GET /api/gameHistory', function () {
   });
 
 	it('Should execute fluid API test - same as above', function (done) {
-		var player1 = "Siggi";
+		var player1 = {
+			userName: "Siggi",
+			side: "X"
+		};
 		var gameName = "ElitesOnly";
 		var gameId = "555";
 
@@ -64,8 +73,14 @@ describe('TEST ENV GET /api/gameHistory', function () {
 	});
 
 	it('Should create a game and player joins', function (done) {
-		var player1 = "Danny";
-		var player2 = "Sebastian";
+		var player1 = {
+			userName: "Danny",
+			side: "X"
+		};
+		var player2 = {
+			userName: "Sebastian",
+			side: "O"
+		};
 		var gameName = "GreatestGameEver";
 		var gameId = "684";
 
@@ -73,13 +88,19 @@ describe('TEST ENV GET /api/gameHistory', function () {
 			user(player1).createsGame(gameName).withId(gameId)
 			.and(player2).joinsGame(gameName).withId(gameId)
 		).expect("GameJoined")
-		.withOtherUser(player1)
+		.byUser(player2)
 		.isOk(done);
 	});
 
 	it('Should play a game until drawn', function (done) {
-		var player1 = "John";
-		var player2 = "Matthew";
+		var player1 = {
+			userName: "John",
+			side: "X"
+		};
+		var player2 = {
+			userName: "Matthew",
+			side: "O"
+		};
 		var gameName = "I am undefeated";
 		var gameId = "122";
 
@@ -95,10 +116,11 @@ describe('TEST ENV GET /api/gameHistory', function () {
 			.and(player1).makesMove(2,2,'X')
 			.and(player2).makesMove(1,2,'O')
 			.and(player1).makesMove(0,2,'X')
-		).expect("DrawMoveMade")
+		).expect("MovePlaced")
 		.byUser(player1)
 		.withCoordinates(0,2)
 		.withSymbol('X')
+		.and("GameDraw")
 		.isOk(done);
 	});
 });

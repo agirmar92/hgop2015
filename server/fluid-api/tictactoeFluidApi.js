@@ -1,23 +1,12 @@
 var should = require('should');
 var request = require('supertest');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
+var expectations = [{}];
+var currEvent = 0;
+var currExpect = 0;
 
 var given = function(commands) {
-
-
-	var currEvent = 0;
-	var currExpect = 0;
-	
 	var cmd = commands.returnValue[currEvent].data;
-
-	var expectations = [{
-		id: cmd.id,
-		event: "",
-		gameId: cmd.gameId,
-		userName: cmd.userName,
-		name: cmd.name,
-		timeStamp: cmd.timeStamp
-	}];
 
 	var executeCommand = function(done, callback) {
 		// Logic goes here
@@ -36,12 +25,6 @@ var given = function(commands) {
 					// Execute next command
 					callback(done, callback);
 				} else {
-					// Modifying the expectations, to something that should be the same as the command
-					expectations[currExpect].timeStamp = cmd.timeStamp;
-					expectations[currExpect].userName = cmd.userName;
-					expectations[currExpect].name = cmd.name;
-					expectations[currExpect].id = cmd.id;
-
 					// All commands have been executed, now assert
 					should(res.body).eql(expectations);
 					done();
@@ -56,34 +39,41 @@ var given = function(commands) {
 			return givenApi;
 		},
 
+		and: function(eventValue) {
+			var firstExpect = expectations[currExpect];
+			expectations[++currExpect] = {
+				event: 'GameDraw',
+			    gameId: firstExpect.gameId,
+			    user: firstExpect.user,
+			    timeStamp: firstExpect.timeStamp
+			};
+			return givenApi;
+		},
+
 		withName: function(name) {
 			expectations[currExpect].name = name;
 			return givenApi;
 		},
 
-		byUser: function(username) {
-			expectations[currExpect].userName = username;
+		byUser: function(user) {
+			expectations[currExpect].user = user;
 			return givenApi;
 		},
 
 		withCoordinates: function(x, y) {
-			expectations[currExpect].x = x;
-			expectations[currExpect].y = y;
-			return givenApi;
-		},
-
-		withOtherUser: function(username) {
-			expectations[currExpect].otherUserName = username;
+			expectations[currExpect].move.x = x;
+			expectations[currExpect].move.y = y;
 			return givenApi;
 		},
 
 		withSymbol: function(symbol) {
-			expectations[currExpect].side = symbol;
+			expectations[currExpect].user.side = symbol;
 			return givenApi;
 		},
 
 		isOk: function(done) {
 			// Execute every command, with help of callbacks
+			currEvent = 0;
 			executeCommand(done, executeCommand);
 		}
 	}
@@ -113,11 +103,20 @@ var user = function(userName) {
 					id: "1234",
 					gameId: "",
 					comm: "CreateGame",
-					userName: currUser,
+					user: currUser,
 					name: gameName,
 					timeStamp: "2015-12-02T11:11:29"
 				},
 				destination: "/api/createGame"
+			};
+
+			expectations[currExpect] = {
+      		    event: "GameCreated",
+				name: command.data.name,
+				gameId: command.data.gameId,
+				id: command.data.id,
+				timeStamp: command.data.timeStamp,
+				user: currUser
 			};
 
 			return userApi;
@@ -129,11 +128,18 @@ var user = function(userName) {
 					id: "9876",
 					comm: "JoinGame",
 					gameId: "",
-					userName: currUser,
-					name: gameName,
+					user: currUser,
 					timeStamp: "2015.05.07T09:17:35"
 				},
 				destination: "/api/joinGame"
+			};
+
+			expectations[currExpect] = {
+				event: "GameJoined",
+				gameId: "",
+				id: "9876",
+				user: currUser,
+				timeStamp: command.data.timeStamp
 			};
 
 			return userApi;
@@ -145,19 +151,28 @@ var user = function(userName) {
 
 			command = {
 				data: {
-					id: "12345",
-			        comm: "MakeMove",
+			        comm: "PlaceMove",
 			        gameId: theId,
-			        userName: currUser,
-			        name: theName,
-			        x: xPos,
-			        y: yPos,
-			        side: symbol,
+			        user: currUser,
+			        move: {
+				        x: xPos,
+				        y: yPos
+			        },
 			        timeStamp: "2015.05.07T09:20:42"
 				},
 				destination: "/api/placeMove"
 			};
 
+			expectations[currExpect] = {
+				event: "MovePlaced",
+				gameId: theId,
+				user: currUser,
+				move: {
+					x: command.data.x,
+					y: command.data.y
+				},
+				timeStamp: command.data.timeStamp
+			};
 
 			commands.push(command);
 			this.returnValue = commands;
@@ -167,8 +182,7 @@ var user = function(userName) {
 
 		withId: function(id) {
 			command.data.gameId = id;
-
-
+			expectations[currExpect].gameId = id;
 			commands.push(command);
 			this.returnValue = commands;
 
