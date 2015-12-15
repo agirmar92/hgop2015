@@ -95,3 +95,11 @@ Eftir Acceptance prófanirnar keyrir Jenkins load/capacity prófanir, til að at
 Uppfærsla: Það var að koma fyrir að 7,5 sekúnda var ekki nægilegur tími, svo ég jók hann upp í 8 sekúndur, það virðist vera flottur þröskuldur.
 
 Leikirnir 200 eru spilaðir "samtímis", þ.e. það er ekki spilað allan fyrsta leikinn út til enda áður en leikur númer tvö byrjar. Þar sem við erum að keyra í NodeJS og það er eins þráðar (single threaded) og keyrir asynchronous, þá heldur forritið áfram að senda skipanir á þjóninn þó svo að hann hafi ekki endilega klárað að framkvæma síðasta kall.
+
+## Dagur 10 / traceability, production env, and deploy any version
+* "What does this give us? Who would use the capability to track versions and why? Who would use capability to deploy any version and why?"
+  - Þetta gefur okkur skýra heildarmynd yfir útgáfur kerfisins og sögu hverrar útgáfu. Það að halda utan um útgáfur nýtist þeim sem nota kerfið okkar í sínu eigin kerfi, sem vefþjónustu til dæmis. Fyrir þá er gott að sjá nýjar útgáfur og hvort uppfærslur brjóti kerfið þeirra til að mynda. Við sem smiðir hugbúnaðarins getum svo nýtt okkur eiginleikan að geta bakkað/uppsett gamlar útgáfur af kerfinu, til dæmis ef ný uppfærsla fer úrskeiðis þá er gott að geta bakkað í örugga útgáfu með einum músarsmell.
+* "What was wrong with having docker push in the deployment script rather than in the dockerbuild.sh script?"
+  - Það átti í raun bara ekki við (seperation of concern). Við eigum að geta nýtt deployment script-una oft, til að keyra upp kerfið á mörgum vélum, án þess að vera að ýta docker myndinni uppá dockerhub í hvert skipti, það þarf aðeins einu sinni og það er eftir að hafa byggt myndina (dockerbuild.sh).
+* "How does the "deploy any version, anywhere" build feature work? Hint: Track GIT_COMMIT"
+  - Með því að halda utan um git commit færslunúmerið við hvert build. Svo ef við viljum bakka um útgáfu, þá eigum við git commit færsluna til staðar og getum þannig sótt nákvæmlega þá útgáfu frá github.
