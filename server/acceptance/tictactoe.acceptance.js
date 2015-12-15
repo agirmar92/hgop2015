@@ -69,7 +69,7 @@ describe('TEST ENV GET /api/gameHistory', function () {
 
 		given(
 			user(player1).createsGame(gameName).withId(gameId)
-		).expect("GameCreated").withName(gameName).isOk(done);
+		).expect("GameCreated").withName(gameName).isOk(done, true);
 	});
 
 	it('Should create a game and player joins', function (done) {
@@ -89,7 +89,7 @@ describe('TEST ENV GET /api/gameHistory', function () {
 			.and(player2).joinsGame(gameName).withId(gameId)
 		).expect("GameJoined")
 		.byUser(player2)
-		.isOk(done);
+		.isOk(done, true);
 	});
 
 	it('Should play a game until drawn', function (done) {
@@ -121,6 +121,6 @@ describe('TEST ENV GET /api/gameHistory', function () {
 		.withCoordinates(0,2)
 		.withSymbol('X')
 		.and("GameDraw")
-		.isOk(done);
+		.isOk(done, true);
 	});
 });

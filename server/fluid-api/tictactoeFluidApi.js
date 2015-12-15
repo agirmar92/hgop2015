@@ -2,13 +2,13 @@ var should = require('should');
 var request = require('supertest');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
 var expectations = [{}];
-var currEvent = 0;
 var currExpect = 0;
 
 var given = function(commands) {
+	var currEvent = 0;
 	var cmd = commands.returnValue[currEvent].data;
 
-	var executeCommand = function(done, callback) {
+	var executeCommand = function(done, callback, assert) {
 		// Logic goes here
 		cmd = commands.returnValue[currEvent].data;
 		var req = request(acceptanceUrl);
@@ -23,10 +23,10 @@ var given = function(commands) {
 
 				if (currEvent !== commands.returnValue.length) {
 					// Execute next command
-					callback(done, callback);
+					callback(done, callback, assert);
 				} else {
 					// All commands have been executed, now assert
-					should(res.body).eql(expectations);
+					if(assert) should(res.body).eql(expectations);
 					done();
 				}
 			});
@@ -71,10 +71,10 @@ var given = function(commands) {
 			return givenApi;
 		},
 
-		isOk: function(done) {
+		isOk: function(done, assert) {
 			// Execute every command, with help of callbacks
 			currEvent = 0;
-			executeCommand(done, executeCommand);
+			executeCommand(done, executeCommand, assert);
 		}
 	}
 

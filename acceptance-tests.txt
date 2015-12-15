@@ -2,20 +2,13 @@
 [0m[0m
 [0m  TEST ENV GET /api/gameHistory[0m
 [2K[0G  [32m  ✓[0m[90m Should have ACCEPTANCE_URL environment variable exported. [0m
-[2K[0G  [32m  ✓[0m[90m Should execute same test using old style [0m[31m(82ms)[0m
+[2K[0G  [32m  ✓[0m[90m Should execute same test using old style [0m[33m(65ms)[0m
 { returnValue: [ { data: [Object], destination: '/api/createGame' } ],
   and: [Function],
   createsGame: [Function],
   joinsGame: [Function],
   makesMove: [Function],
   withId: [Function] }
-about to execute: 
-{ id: '1234',
-  gameId: '555',
-  comm: 'CreateGame',
-  user: { userName: 'Siggi', side: 'X' },
-  name: 'ElitesOnly',
-  timeStamp: '2015-12-02T11:11:29' }
 [2K[0G  [32m  ✓[0m[90m Should execute fluid API test - same as above [0m
 { returnValue: 
    [ { data: [Object], destination: '/api/createGame' },
@@ -25,19 +18,14 @@ about to execute:
   joinsGame: [Function],
   makesMove: [Function],
   withId: [Function] }
-about to execute: 
-{ id: '1234',
-  gameId: '684',
-  comm: 'CreateGame',
-  user: { userName: 'Danny', side: 'X' },
-  name: 'GreatestGameEver',
-  timeStamp: '2015-12-02T11:11:29' }
-about to execute: 
-{ id: '9876',
-  comm: 'JoinGame',
-  gameId: '684',
-  user: { userName: 'Sebastian', side: 'O' },
-  timeStamp: '2015.05.07T09:17:35' }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
 [2K[0G  [32m  ✓[0m[90m Should create a game and player joins [0m
 { returnValue: 
    [ { data: [Object], destination: '/api/createGame' },
@@ -56,75 +44,178 @@ about to execute:
   joinsGame: [Function],
   makesMove: [Function],
   withId: [Function] }
-about to execute: 
-{ id: '1234',
-  gameId: '122',
-  comm: 'CreateGame',
-  user: { userName: 'John', side: 'X' },
-  name: 'I am undefeated',
-  timeStamp: '2015-12-02T11:11:29' }
-about to execute: 
-{ id: '9876',
-  comm: 'JoinGame',
-  gameId: '122',
-  user: { userName: 'Matthew', side: 'O' },
-  timeStamp: '2015.05.07T09:17:35' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'John', side: 'X' },
-  move: { x: 1, y: 1 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'Matthew', side: 'O' },
-  move: { x: 2, y: 0 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'John', side: 'X' },
-  move: { x: 0, y: 1 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'Matthew', side: 'O' },
-  move: { x: 0, y: 0 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'John', side: 'X' },
-  move: { x: 1, y: 0 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'Matthew', side: 'O' },
-  move: { x: 2, y: 1 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'John', side: 'X' },
-  move: { x: 2, y: 2 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'Matthew', side: 'O' },
-  move: { x: 1, y: 2 },
-  timeStamp: '2015.05.07T09:20:42' }
-about to execute: 
-{ comm: 'PlaceMove',
-  gameId: '122',
-  user: { userName: 'John', side: 'X' },
-  move: { x: 0, y: 2 },
-  timeStamp: '2015.05.07T09:20:42' }
-[2K[0G  [32m  ✓[0m[90m Should play a game until drawn [0m[33m(66ms)[0m
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+{ returnValue: 
+   [ { data: [Object], destination: '/api/createGame' },
+     { data: [Object], destination: '/api/joinGame' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' },
+     { data: [Object], destination: '/api/placeMove' } ],
+  and: [Function],
+  createsGame: [Function],
+  joinsGame: [Function],
+  makesMove: [Function],
+  withId: [Function] }
+[2K[0G  [32m  ✓[0m[90m Should play a game until drawn [0m[31m(80ms)[0m
 
 
-[92m [0m[32m 5 passing[0m[90m (189ms)[0m
+[92m [0m[32m 5 passing[0m[90m (183ms)[0m
 

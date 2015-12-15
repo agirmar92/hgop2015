@@ -15,8 +15,14 @@ it('Should play 200 games in 8 seconds.', function (done) {
   };
 
   for (var gameId = 0; gameId < gamesToPlay; gameId++) {
-    var player1 = "TestUserOne";
-    var player2 = "TestUserTwo";
+    var player1 = {
+      userName: "TestUserOne",
+      side: "X"
+    };
+    var player2 = {
+      userName: "TestUserTwo",
+      side: "O"
+    };
     var gameName = "Game number " + gameId;
 
     given(
@@ -31,10 +37,11 @@ it('Should play 200 games in 8 seconds.', function (done) {
       .and(player1).makesMove(2,2,'X')
       .and(player2).makesMove(1,2,'O')
       .and(player1).makesMove(0,2,'X')
-    ).expect("DrawMoveMade")
+    ).expect("MovePlaced")
     .byUser(player1)
     .withCoordinates(0,2)
     .withSymbol('X')
-    .isOk(QED);
+    .and("GameDraw")
+    .isOk(QED, false);
   }
 });
