@@ -1,7 +1,7 @@
 var user = require('../fluid-api/tictactoeFluidApi').user;
 var given = require('../fluid-api/tictactoeFluidApi').given;
 
-it('Should play 200 games in 7.5 seconds.', function (done) {
+it('Should play 200 games in 8 seconds.', function (done) {
   var doneCount = 0;
   var gamesToPlay = 200;
   var x = 8;
